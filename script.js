@@ -147,8 +147,13 @@ class Game2048 {
     }
 
     newGame() {
+        this.stopAutoPlay();
+        this.setLockMode(false);
+        document.getElementById('lock-mode').checked = false;
+        this.hideSettings();
+        this.hideTutorial();
+        
         this.playSound('newgame');
-        this.stopTimer();
         this.initializeGame();
     }
 
