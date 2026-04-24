@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048 数字合成游戏</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <h1 class="game-title">2048</h1>
+            <div class="scores">
+                <div class="score-container">
+                    <div class="score-label">分数</div>
+                    <div class="score-value" id="score">0</div>
+                </div>
+                <div class="score-container">
+                    <div class="score-label">最高分</div>
+                    <div class="score-value" id="best-score">0</div>
+                </div>
+                <div class="score-container">
+                    <div class="score-label">步数</div>
+                    <div class="score-value" id="moves">0</div>
+                </div>
+                <div class="score-container">
+                    <div class="score-label">时间</div>
+                    <div class="score-value" id="timer">00:00</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="game-controls">
+            <button id="new-game" class="btn btn-primary">新游戏</button>
+            <button id="undo" class="btn btn-secondary">撤销</button>
+            <button id="hint" class="btn btn-secondary">提示</button>
+            <button id="settings" class="btn btn-secondary">设置</button>
+        </div>
+
+        <div class="game-board" id="game-board">
+            <div class="grid-container">
+                <div class="grid-row">
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                </div>
+                <div class="grid-row">
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                </div>
+                <div class="grid-row">
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                </div>
+                <div class="grid-row">
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                </div>
+            </div>
+            <div class="tile-container" id="tile-container"></div>
+        </div>
+
+        <div class="game-messages">
+            <div id="game-over" class="message message-over hidden">
+                <h2>游戏结束！</h2>
+                <p>最终分数: <span id="final-score">0</span></p>
+                <button id="try-again" class="btn btn-primary">再试一次</button>
+            </div>
+            <div id="game-won" class="message message-won hidden">
+                <h2>恭喜获胜！</h2>
+                <p>你达到了 2048！</p>
+                <button id="continue-playing" class="btn btn-primary">继续游戏</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="settings-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>游戏设置</h2>
+                <button id="close-settings" class="btn-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h3>主题配色</h3>
+                    <div class="theme-options">
+                        <button class="theme-btn active" data-theme="classic">经典</button>
+                        <button class="theme-btn" data-theme="dark">暗黑</button>
+                        <button class="theme-btn" data-theme="ocean">海洋</button>
+                        <button class="theme-btn" data-theme="forest">森林</button>
+                        <button class="theme-btn" data-theme="sunset">日落</button>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>边框样式</h3>
+                    <div class="border-options">
+                        <button class="border-btn active" data-border="rounded">圆角</button>
+                        <button class="border-btn" data-border="square">直角</button>
+                        <button class="border-btn" data-border="shadow">阴影</button>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>字体风格</h3>
+                    <div class="font-options">
+                        <button class="font-btn active" data-font="default">默认</button>
+                        <button class="font-btn" data-font="bold">粗体</button>
+                        <button class="font-btn" data-font="italic">斜体</button>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>背景设置</h3>
+                    <div class="background-options">
+                        <input type="file" id="bg-image" accept="image/*">
+                        <button id="clear-bg" class="btn btn-secondary">清除背景</button>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <div class="setting-item">
+                        <label for="sound-toggle">音效</label>
+                        <input type="checkbox" id="sound-toggle" checked>
+                    </div>
+                    <div class="setting-item">
+                        <label for="vibration-toggle">震动反馈</label>
+                        <input type="checkbox" id="vibration-toggle" checked>
+                    </div>
+                    <div class="setting-item">
+                        <label for="night-mode">夜间护眼</label>
+                        <input type="checkbox" id="night-mode">
+                    </div>
+                    <div class="setting-item">
+                        <label for="auto-play">自动走位</label>
+                        <input type="checkbox" id="auto-play">
+                    </div>
+                    <div class="setting-item">
+                        <label for="lock-mode">防误触锁定</label>
+                        <input type="checkbox" id="lock-mode">
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <button id="screenshot" class="btn btn-secondary">截图保存</button>
+                    <button id="reset-settings" class="btn btn-secondary">恢复默认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tutorial-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>游戏说明</h2>
+                <button id="close-tutorial" class="btn-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tutorial-content">
+                    <h3>如何游玩</h3>
+                    <p>使用键盘方向键（↑ ↓ ← →）来滑动所有方块。</p>
+                    <p>当两个相同数字的方块碰撞时，它们会合并成一个更大的数字。</p>
+                    <p>每次滑动后，会随机生成一个新的 2 或 4。</p>
+                    
+                    <h3>游戏目标</h3>
+                    <p>创建一个值为 2048 的方块来赢得游戏！</p>
+                    
+                    <h3>控制按钮</h3>
+                    <ul>
+                        <li><strong>新游戏</strong> - 开始新的游戏</li>
+                        <li><strong>撤销</strong> - 恢复上一步操作</li>
+                        <li><strong>提示</strong> - 显示下一步建议</li>
+                        <li><strong>设置</strong> - 调整游戏设置</li>
+                    </ul>
+                    
+                    <h3>键盘快捷键</h3>
+                    <ul>
+                        <li><strong>方向键</strong> - 移动方块</li>
+                        <li><strong>R</strong> - 重新开始</li>
+                        <li><strong>Z</strong> - 撤销上一步</li>
+                        <li><strong>L</strong> - 锁定/解锁</li>
+                    </ul>
+                </div>
+                <div class="tutorial-checkbox">
+                    <input type="checkbox" id="dont-show-again">
+                    <label for="dont-show-again">不再显示此提示</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="lock-overlay" class="lock-overlay hidden">
+        <div class="lock-message">
+            <h2>游戏已锁定</h2>
+            <p>按 L 键解锁</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
